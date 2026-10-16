@@ -96,6 +96,7 @@ bd.BackgroundTransparency=1
 local lay=Instance.new("UIListLayout",bd)
 lay.Padding=UDim.new(0,7)
 lay.SortOrder=Enum.SortOrder.LayoutOrder
+local btnStrokes={}
 local function mk(t,o)
     local b=Instance.new("TextButton",bd)
     b.Size=UDim2.new(1,0,0,34)
@@ -112,24 +113,23 @@ local function mk(t,o)
     s.Color=RD
     s.Thickness=1
     s.Transparency=0.55
+    btnStrokes[b]=s
     b.MouseEnter:Connect(function()
-        if not b:GetAttribute("on") then
+        if b.BackgroundColor3~=RDD then
             b.BackgroundColor3=Color3.fromRGB(38,10,15)
             s.Transparency=0.2
         end
     end)
     b.MouseLeave:Connect(function()
-        if not b:GetAttribute("on") then
+        if b.BackgroundColor3~=RDD then
             b.BackgroundColor3=BG2
             s.Transparency=0.55
         end
     end)
-    b:SetAttribute("stroke",s)
     return b
 end
 local function setBtn(b,on)
-    b:SetAttribute("on",on)
-    local s=b:GetAttribute("stroke")
+    local s=btnStrokes[b]
     if on then
         b.BackgroundColor3=RDD
         b.TextColor3=TX
@@ -158,11 +158,11 @@ local function mkESP(p)
     local hm=c:FindFirstChildOfClass("Humanoid")
     if not h or not hm then return end
     if not c:FindFirstChild("ESPH")then
-        local hl=Instance.new("Highlight",c)
-        hl.Name="ESPH"
-        hl.FillColor=Color3.fromRGB(255,60,70)
-        hl.OutlineColor=Color3.new(1,1,1)
-        hl.FillTransparency=0.7
+        local hlp=Instance.new("Highlight",c)
+        hlp.Name="ESPH"
+        hlp.FillColor=Color3.fromRGB(255,60,70)
+        hlp.OutlineColor=Color3.new(1,1,1)
+        hlp.FillTransparency=0.7
     end
     if not h:FindFirstChild("ESPBB")then
         local bb=Instance.new("BillboardGui",h)

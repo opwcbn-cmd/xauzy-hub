@@ -1,4 +1,3 @@
-
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Awesome-Invisible-man-21074"))()
 local P=game:GetService("Players")
 local R=game:GetService("RunService")
@@ -16,12 +15,29 @@ sg.Name="XauzyGui"
 sg.ResetOnSpawn=false
 sg.DisplayOrder=999
 sg.Parent=L:WaitForChild("PlayerGui")
+-- NOTIFIKASI
+local notif=Instance.new("TextLabel",sg)
+notif.Size=UDim2.new(0,200,0,30)
+notif.Position=UDim2.new(0.5,-100,0,20)
+notif.BackgroundColor3=RDD
+notif.TextColor3=TX
+notif.Font=Enum.Font.GothamBold
+notif.TextSize=12
+notif.Visible=false
+notif.ZIndex=100
+Instance.new("UICorner",notif).CornerRadius=UDim.new(0,8)
+Instance.new("UIStroke",notif).Color=RD
+local function showNotif(txt)
+    notif.Text=txt
+    notif.Visible=true
+    task.delay(2,function() if notif then notif.Visible=false end end)
+end
 local mf=Instance.new("Frame",sg)
-mf.Size=UDim2.new(0,220,0,330)
-mf.Position=UDim2.new(0.5,-110,0.5,-165)
+mf.Size=UDim2.new(0,220,0,340)
+mf.Position=UDim2.new(0.5,-110,0.5,-170)
 mf.BackgroundColor3=BG
 mf.BorderSizePixel=0
-Instance.new("UICorner",mf).CornerRadius=UDim.new(0,12)
+Instance.new("UICorner",mf).CornerRadius=UDim.new(0,14)
 local ms=Instance.new("UIStroke",mf)
 ms.Color=RD
 ms.Thickness=1.5
@@ -31,13 +47,13 @@ gw.Color=RD
 gw.Thickness=6
 gw.Transparency=0.85
 local hd=Instance.new("Frame",mf)
-hd.Size=UDim2.new(1,0,0,45)
+hd.Size=UDim2.new(1,0,0,48)
 hd.BackgroundColor3=HD
 hd.BorderSizePixel=0
-Instance.new("UICorner",hd).CornerRadius=UDim.new(0,12)
+Instance.new("UICorner",hd).CornerRadius=UDim.new(0,14)
 local hf=Instance.new("Frame",hd)
-hf.Size=UDim2.new(1,0,0,12)
-hf.Position=UDim2.new(0,0,1,-12)
+hf.Size=UDim2.new(1,0,0,14)
+hf.Position=UDim2.new(0,0,1,-14)
 hf.BackgroundColor3=HD
 hf.BorderSizePixel=0
 local hl=Instance.new("Frame",hd)
@@ -47,24 +63,25 @@ hl.BackgroundColor3=RD
 hl.BorderSizePixel=0
 hl.ZIndex=2
 local logo=Instance.new("TextLabel",hd)
-logo.Size=UDim2.new(0,32,0,32)
-logo.Position=UDim2.new(0,8,0.5,-16)
+logo.Size=UDim2.new(0,34,0,34)
+logo.Position=UDim2.new(0,8,0.5,-17)
 logo.BackgroundColor3=RDD
 logo.Text="XY"
 logo.TextColor3=TX
 logo.Font=Enum.Font.GothamBlack
-logo.TextSize=14
+logo.TextSize=15
 logo.BorderSizePixel=0
 logo.ZIndex=2
-Instance.new("UICorner",logo).CornerRadius=UDim.new(0,8)
+Instance.new("UICorner",logo).CornerRadius=UDim.new(0,10)
+Instance.new("UIStroke",logo).Color=RD
 local tt=Instance.new("TextLabel",hd)
 tt.Size=UDim2.new(1,-100,1,0)
-tt.Position=UDim2.new(0,48,0,0)
+tt.Position=UDim2.new(0,50,0,0)
 tt.BackgroundTransparency=1
 tt.Text="XAUZY HUB"
 tt.TextColor3=TX
 tt.Font=Enum.Font.GothamBold
-tt.TextSize=13
+tt.TextSize=14
 tt.TextXAlignment=Enum.TextXAlignment.Left
 tt.ZIndex=2
 local mn=Instance.new("TextButton",hd)
@@ -95,8 +112,8 @@ local cbs=Instance.new("UIStroke",cb)
 cbs.Color=RD
 cbs.Thickness=1
 local bd=Instance.new("Frame",mf)
-bd.Size=UDim2.new(1,-20,1,-60)
-bd.Position=UDim2.new(0,10,0,50)
+bd.Size=UDim2.new(1,-20,1,-62)
+bd.Position=UDim2.new(0,10,0,52)
 bd.BackgroundTransparency=1
 local lay=Instance.new("UIListLayout",bd)
 lay.Padding=UDim.new(0,6)
@@ -418,25 +435,25 @@ aBB.MouseButton1Click:Connect(function()
     end
 end)
 local tpM=Instance.new("Frame",sg)
-tpM.Size=UDim2.new(0,175,0,250)
-tpM.Position=UDim2.new(0.5,-87,0.5,-125)
+tpM.Size=UDim2.new(0,180,0,260)
+tpM.Position=UDim2.new(0.5,-90,0.5,-130)
 tpM.BackgroundColor3=BG
 tpM.BorderSizePixel=0
 tpM.Visible=false
 tpM.ZIndex=10
-Instance.new("UICorner",tpM).CornerRadius=UDim.new(0,12)
+Instance.new("UICorner",tpM).CornerRadius=UDim.new(0,14)
 local tps=Instance.new("UIStroke",tpM)
 tps.Color=RD
 tps.Thickness=1.5
 local tpH=Instance.new("Frame",tpM)
-tpH.Size=UDim2.new(1,0,0,36)
+tpH.Size=UDim2.new(1,0,0,38)
 tpH.BackgroundColor3=HD
 tpH.BorderSizePixel=0
 tpH.ZIndex=11
-Instance.new("UICorner",tpH).CornerRadius=UDim.new(0,12)
+Instance.new("UICorner",tpH).CornerRadius=UDim.new(0,14)
 local tpf=Instance.new("Frame",tpH)
-tpf.Size=UDim2.new(1,0,0,10)
-tpf.Position=UDim2.new(0,0,1,-10)
+tpf.Size=UDim2.new(1,0,0,12)
+tpf.Position=UDim2.new(0,0,1,-12)
 tpf.BackgroundColor3=HD
 tpf.BorderSizePixel=0
 tpf.ZIndex=11
@@ -468,8 +485,8 @@ tpX.BorderSizePixel=0
 tpX.ZIndex=12
 Instance.new("UICorner",tpX).CornerRadius=UDim.new(0,6)
 local tpS=Instance.new("ScrollingFrame",tpM)
-tpS.Size=UDim2.new(1,-14,1,-50)
-tpS.Position=UDim2.new(0,7,0,42)
+tpS.Size=UDim2.new(1,-14,1,-52)
+tpS.Position=UDim2.new(0,7,0,44)
 tpS.BackgroundTransparency=1
 tpS.BorderSizePixel=0
 tpS.ScrollBarThickness=3
@@ -506,8 +523,9 @@ local function refreshTP()
                 if not mc then return end
                 local th=p.Character and p.Character:FindFirstChild("HumanoidRootPart")
                 if th then
-                    mc:PivotTo(th.CFrame*CFrame.new(0,0,2))
+                    pcall(function() mc:PivotTo(th.CFrame*CFrame.new(0,0,2)) end)
                     b.Text="TP OK"
+                    showNotif("Teleported ke "..p.Name)
                     task.wait(0.5)
                     if b and b.Parent then b.Text=p.Name end
                 end
@@ -521,25 +539,25 @@ tpB.MouseButton1Click:Connect(function()
 end)
 tpX.MouseButton1Click:Connect(function()tpM.Visible=false end)
 local cpM=Instance.new("Frame",sg)
-cpM.Size=UDim2.new(0,190,0,260)
-cpM.Position=UDim2.new(0.5,-95,0.5,-130)
+cpM.Size=UDim2.new(0,200,0,280)
+cpM.Position=UDim2.new(0.5,-100,0.5,-140)
 cpM.BackgroundColor3=BG
 cpM.BorderSizePixel=0
 cpM.Visible=false
 cpM.ZIndex=10
-Instance.new("UICorner",cpM).CornerRadius=UDim.new(0,12)
+Instance.new("UICorner",cpM).CornerRadius=UDim.new(0,14)
 local cps=Instance.new("UIStroke",cpM)
 cps.Color=RD
 cps.Thickness=1.5
 local cpH=Instance.new("Frame",cpM)
-cpH.Size=UDim2.new(1,0,0,36)
+cpH.Size=UDim2.new(1,0,0,38)
 cpH.BackgroundColor3=HD
 cpH.BorderSizePixel=0
 cpH.ZIndex=11
-Instance.new("UICorner",cpH).CornerRadius=UDim.new(0,12)
+Instance.new("UICorner",cpH).CornerRadius=UDim.new(0,14)
 local cpf=Instance.new("Frame",cpH)
-cpf.Size=UDim2.new(1,0,0,10)
-cpf.Position=UDim2.new(0,0,1,-10)
+cpf.Size=UDim2.new(1,0,0,12)
+cpf.Position=UDim2.new(0,0,1,-12)
 cpf.BackgroundColor3=HD
 cpf.BorderSizePixel=0
 cpf.ZIndex=11
@@ -571,8 +589,8 @@ cpX.BorderSizePixel=0
 cpX.ZIndex=12
 Instance.new("UICorner",cpX).CornerRadius=UDim.new(0,6)
 local cpS=Instance.new("ScrollingFrame",cpM)
-cpS.Size=UDim2.new(1,-14,1,-50)
-cpS.Position=UDim2.new(0,7,0,42)
+cpS.Size=UDim2.new(1,-14,1,-52)
+cpS.Position=UDim2.new(0,7,0,44)
 cpS.BackgroundTransparency=1
 cpS.BorderSizePixel=0
 cpS.ScrollBarThickness=3
@@ -583,20 +601,34 @@ cpS.ZIndex=11
 local cpL=Instance.new("UIListLayout",cpS)
 cpL.Padding=UDim.new(0,5)
 cpL.SortOrder=Enum.SortOrder.LayoutOrder
-local function getAv(p)
-    local s,e=pcall(function()
-        return P:GetHumanoidDescriptionFromUserId(p.UserId)
-    end)
-    if s and e then return e end
-    return nil
-end
-local function applyAv(desc)
+local function applyAvatar(uid, name)
     local c=L.Character
-    if not c then return end
+    if not c then showNotif("Character gak ada") return end
     local h=c:FindFirstChildOfClass("Humanoid")
-    if h and desc then
-        pcall(function() h:ApplyDescription(desc) end)
-    end
+    if not h then showNotif("Humanoid gak ada") return end
+    showNotif("Loading AVA "..name.."...")
+    task.spawn(function()
+        local suc, desc = pcall(function()
+            return P:GetHumanoidDescriptionFromUserId(uid)
+        end)
+        if not suc or not desc then
+            showNotif("Gagal ambil AVA")
+            return
+        end
+        local ok = pcall(function()
+            h:ApplyDescription(desc)
+        end)
+        if not ok then
+            local ok2 = pcall(function()
+                h:ApplyDescriptionReset(desc)
+            end)
+            if not ok2 then
+                showNotif("Gagal apply AVA (game block)")
+                return
+            end
+        end
+        showNotif("AVA "..name.." berhasil!")
+    end)
 end
 local function mkAvBtn(txt,onClick)
     local b=Instance.new("TextButton",cpS)
@@ -624,26 +656,19 @@ local function refreshCP()
     for _,p in pairs(P:GetPlayers())do
         if p~=L and p.Character then
             mkAvBtn(p.Name,function()
-                local d=getAv(p)
-                if d then applyAv(d) end
+                applyAvatar(p.UserId, p.Name)
             end)
         end
     end
     mkAvBtn("HerulAjaDeh",function()
         local id=0
         pcall(function() id=P:GetUserIdFromNameAsync("HerulAjaDeh") end)
-        if id>0 then
-            local s,d=pcall(function() return P:GetHumanoidDescriptionFromUserId(id) end)
-            if s and d then applyAv(d) end
-        end
+        if id>0 then applyAvatar(id, "HerulAjaDeh") else showNotif("User HerulAjaDeh gak ketemu") end
     end)
     mkAvBtn("kojayy1",function()
         local id=0
         pcall(function() id=P:GetUserIdFromNameAsync("kojayy1") end)
-        if id>0 then
-            local s,d=pcall(function() return P:GetHumanoidDescriptionFromUserId(id) end)
-            if s and d then applyAv(d) end
-        end
+        if id>0 then applyAvatar(id, "kojayy1") else showNotif("User kojayy1 gak ketemu") end
     end)
 end
 cpB.MouseButton1Click:Connect(function()
@@ -700,11 +725,11 @@ local min=false
 mn.MouseButton1Click:Connect(function()
     min=not min
     if min then
-        mf.Size=UDim2.new(0,220,0,45)
+        mf.Size=UDim2.new(0,220,0,48)
         bd.Visible=false
         mn.Text="+"
     else
-        mf.Size=UDim2.new(0,220,0,330)
+        mf.Size=UDim2.new(0,220,0,340)
         bd.Visible=true
         mn.Text="-"
     end

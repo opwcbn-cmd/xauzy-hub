@@ -1,3 +1,4 @@
+
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Awesome-Invisible-man-21074"))()
 local P=game:GetService("Players")
 local R=game:GetService("RunService")
@@ -16,8 +17,8 @@ sg.ResetOnSpawn=false
 sg.DisplayOrder=999
 sg.Parent=L:WaitForChild("PlayerGui")
 local mf=Instance.new("Frame",sg)
-mf.Size=UDim2.new(0,210,0,300)
-mf.Position=UDim2.new(0.5,-105,0.5,-150)
+mf.Size=UDim2.new(0,220,0,330)
+mf.Position=UDim2.new(0.5,-110,0.5,-165)
 mf.BackgroundColor3=BG
 mf.BorderSizePixel=0
 Instance.new("UICorner",mf).CornerRadius=UDim.new(0,12)
@@ -30,7 +31,7 @@ gw.Color=RD
 gw.Thickness=6
 gw.Transparency=0.85
 local hd=Instance.new("Frame",mf)
-hd.Size=UDim2.new(1,0,0,42)
+hd.Size=UDim2.new(1,0,0,45)
 hd.BackgroundColor3=HD
 hd.BorderSizePixel=0
 Instance.new("UICorner",hd).CornerRadius=UDim.new(0,12)
@@ -45,23 +46,27 @@ hl.Position=UDim2.new(0,10,1,-1)
 hl.BackgroundColor3=RD
 hl.BorderSizePixel=0
 hl.ZIndex=2
+local logo=Instance.new("TextLabel",hd)
+logo.Size=UDim2.new(0,32,0,32)
+logo.Position=UDim2.new(0,8,0.5,-16)
+logo.BackgroundColor3=RDD
+logo.Text="XY"
+logo.TextColor3=TX
+logo.Font=Enum.Font.GothamBlack
+logo.TextSize=14
+logo.BorderSizePixel=0
+logo.ZIndex=2
+Instance.new("UICorner",logo).CornerRadius=UDim.new(0,8)
 local tt=Instance.new("TextLabel",hd)
-tt.Size=UDim2.new(1,-70,1,0)
-tt.Position=UDim2.new(0,14,0,0)
+tt.Size=UDim2.new(1,-100,1,0)
+tt.Position=UDim2.new(0,48,0,0)
 tt.BackgroundTransparency=1
-tt.Text="XAUZY"
-tt.TextColor3=RD
+tt.Text="XAUZY HUB"
+tt.TextColor3=TX
 tt.Font=Enum.Font.GothamBold
-tt.TextSize=15
+tt.TextSize=13
 tt.TextXAlignment=Enum.TextXAlignment.Left
 tt.ZIndex=2
-local dt=Instance.new("Frame",hd)
-dt.Size=UDim2.new(0,6,0,6)
-dt.Position=UDim2.new(0,88,0.5,-3)
-dt.BackgroundColor3=RD
-dt.BorderSizePixel=0
-Instance.new("UICorner",dt).CornerRadius=UDim.new(1,0)
-dt.ZIndex=2
 local mn=Instance.new("TextButton",hd)
 mn.Size=UDim2.new(0,22,0,22)
 mn.Position=UDim2.new(1,-50,0.5,-11)
@@ -90,16 +95,16 @@ local cbs=Instance.new("UIStroke",cb)
 cbs.Color=RD
 cbs.Thickness=1
 local bd=Instance.new("Frame",mf)
-bd.Size=UDim2.new(1,-20,1,-58)
-bd.Position=UDim2.new(0,10,0,48)
+bd.Size=UDim2.new(1,-20,1,-60)
+bd.Position=UDim2.new(0,10,0,50)
 bd.BackgroundTransparency=1
 local lay=Instance.new("UIListLayout",bd)
-lay.Padding=UDim.new(0,7)
+lay.Padding=UDim.new(0,6)
 lay.SortOrder=Enum.SortOrder.LayoutOrder
 local btnStrokes={}
-local function mk(t,o)
-    local b=Instance.new("TextButton",bd)
-    b.Size=UDim2.new(1,0,0,34)
+local function mk(t,o,par)
+    local b=Instance.new("TextButton",par or bd)
+    b.Size=UDim2.new(1,0,0,32)
     b.BackgroundColor3=BG2
     b.Text=t
     b.TextColor3=TX
@@ -143,9 +148,10 @@ end
 local espB=mk("ESP : OFF",1)
 local flyB=mk("FLY : OFF",2)
 local spdB=mk("SPEED : OFF",3)
-local aHB=mk("AIM HEAD : OFF",4)
-local aBB=mk("AIM BODY : OFF",5)
+local aHB=mk("AIM LOCK HEAD : OFF",4)
+local aBB=mk("AIM LOCK BODY : OFF",5)
 local tpB=mk("TELEPORT",6)
+local cpB=mk("COPY AVA",7)
 local espOn,flyOn,spdOn,aHOn,aBOn=false,false,false,false,false
 local FLY_S,WALK_S=55,60
 local flyC,aimC
@@ -353,12 +359,7 @@ local function findT(mode)
     end
     if #ls==0 then return nil end
     table.sort(ls,function(a,b)return a.d<b.d end)
-    local fl={}
-    for _,v in ipairs(ls)do
-        if v.d>=20 and v.d<=250 then table.insert(fl,v)end
-    end
-    if #fl==0 then return ls[math.floor(#ls/2)+1].p end
-    return fl[math.floor(#fl/2)+1].p
+    return ls[1].p
 end
 local function stopAim()
     if aimC then aimC:Disconnect()aimC=nil end
@@ -367,7 +368,7 @@ end
 local function startAim(mode)
     stopAim()
     mkBeam()
-    aimC=R.Heartbeat:Connect(function()
+    aimC=R.RenderStepped:Connect(function()
         if mode=="head"and not aHOn then return end
         if mode=="body"and not aBOn then return end
         local cam=workspace.CurrentCamera
@@ -378,7 +379,7 @@ local function startAim(mode)
             return
         end
         local tcf=CFrame.new(cam.CFrame.Position,t.Position)
-        cam.CFrame=cam.CFrame:Lerp(tcf,0.45)
+        cam.CFrame=cam.CFrame:Lerp(tcf,0.25)
         if aimBeam and aimBeam.beam then
             local a1=t:FindFirstChild("AimAtt")
             if not a1 then
@@ -392,11 +393,11 @@ local function startAim(mode)
 end
 aHB.MouseButton1Click:Connect(function()
     aHOn=not aHOn
-    aHB.Text=aHOn and "AIM HEAD : ON"or"AIM HEAD : OFF"
+    aHB.Text=aHOn and "AIM LOCK HEAD : ON"or"AIM LOCK HEAD : OFF"
     setBtn(aHB,aHOn)
     if aHOn then
         aBOn=false
-        aBB.Text="AIM BODY : OFF"
+        aBB.Text="AIM LOCK BODY : OFF"
         setBtn(aBB,false)
         startAim("head")
     else
@@ -405,11 +406,11 @@ aHB.MouseButton1Click:Connect(function()
 end)
 aBB.MouseButton1Click:Connect(function()
     aBOn=not aBOn
-    aBB.Text=aBOn and "AIM BODY : ON"or"AIM BODY : OFF"
+    aBB.Text=aBOn and "AIM LOCK BODY : ON"or"AIM LOCK BODY : OFF"
     setBtn(aBB,aBOn)
     if aBOn then
         aHOn=false
-        aHB.Text="AIM HEAD : OFF"
+        aHB.Text="AIM LOCK HEAD : OFF"
         setBtn(aHB,false)
         startAim("body")
     else
@@ -503,12 +504,11 @@ local function refreshTP()
             b.MouseButton1Click:Connect(function()
                 local mc=L.Character
                 if not mc then return end
-                local mh=mc:FindFirstChild("HumanoidRootPart")
                 local th=p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-                if mh and th then
-                    mh.CFrame=th.CFrame*CFrame.new(0,0,3)
-                    b.Text="OK"
-                    task.wait(0.6)
+                if th then
+                    mc:PivotTo(th.CFrame*CFrame.new(0,0,2))
+                    b.Text="TP OK"
+                    task.wait(0.5)
                     if b and b.Parent then b.Text=p.Name end
                 end
             end)
@@ -520,25 +520,137 @@ tpB.MouseButton1Click:Connect(function()
     if tpM.Visible then refreshTP()end
 end)
 tpX.MouseButton1Click:Connect(function()tpM.Visible=false end)
-do
-    local dg,ds,sp
-    tpH.InputBegan:Connect(function(i)
-        if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then
-            dg=true
-            ds=i.Position
-            sp=tpM.Position
+local cpM=Instance.new("Frame",sg)
+cpM.Size=UDim2.new(0,190,0,260)
+cpM.Position=UDim2.new(0.5,-95,0.5,-130)
+cpM.BackgroundColor3=BG
+cpM.BorderSizePixel=0
+cpM.Visible=false
+cpM.ZIndex=10
+Instance.new("UICorner",cpM).CornerRadius=UDim.new(0,12)
+local cps=Instance.new("UIStroke",cpM)
+cps.Color=RD
+cps.Thickness=1.5
+local cpH=Instance.new("Frame",cpM)
+cpH.Size=UDim2.new(1,0,0,36)
+cpH.BackgroundColor3=HD
+cpH.BorderSizePixel=0
+cpH.ZIndex=11
+Instance.new("UICorner",cpH).CornerRadius=UDim.new(0,12)
+local cpf=Instance.new("Frame",cpH)
+cpf.Size=UDim2.new(1,0,0,10)
+cpf.Position=UDim2.new(0,0,1,-10)
+cpf.BackgroundColor3=HD
+cpf.BorderSizePixel=0
+cpf.ZIndex=11
+local cpL2=Instance.new("Frame",cpH)
+cpL2.Size=UDim2.new(1,-20,0,1)
+cpL2.Position=UDim2.new(0,10,1,-1)
+cpL2.BackgroundColor3=RD
+cpL2.BorderSizePixel=0
+cpL2.ZIndex=12
+local cpT=Instance.new("TextLabel",cpH)
+cpT.Size=UDim2.new(1,-34,1,0)
+cpT.Position=UDim2.new(0,12,0,0)
+cpT.BackgroundTransparency=1
+cpT.Text="COPY AVA"
+cpT.TextColor3=RD
+cpT.Font=Enum.Font.GothamBold
+cpT.TextSize=12
+cpT.TextXAlignment=Enum.TextXAlignment.Left
+cpT.ZIndex=12
+local cpX=Instance.new("TextButton",cpH)
+cpX.Size=UDim2.new(0,22,0,22)
+cpX.Position=UDim2.new(1,-26,0.5,-11)
+cpX.BackgroundColor3=RDD
+cpX.Text="X"
+cpX.TextColor3=TX
+cpX.Font=Enum.Font.GothamBold
+cpX.TextSize=12
+cpX.BorderSizePixel=0
+cpX.ZIndex=12
+Instance.new("UICorner",cpX).CornerRadius=UDim.new(0,6)
+local cpS=Instance.new("ScrollingFrame",cpM)
+cpS.Size=UDim2.new(1,-14,1,-50)
+cpS.Position=UDim2.new(0,7,0,42)
+cpS.BackgroundTransparency=1
+cpS.BorderSizePixel=0
+cpS.ScrollBarThickness=3
+cpS.ScrollBarImageColor3=RD
+cpS.CanvasSize=UDim2.new(0,0,0,0)
+cpS.AutomaticCanvasSize=Enum.AutomaticSize.Y
+cpS.ZIndex=11
+local cpL=Instance.new("UIListLayout",cpS)
+cpL.Padding=UDim.new(0,5)
+cpL.SortOrder=Enum.SortOrder.LayoutOrder
+local function getAv(p)
+    local s,e=pcall(function()
+        return P:GetHumanoidDescriptionFromUserId(p.UserId)
+    end)
+    if s and e then return e end
+    return nil
+end
+local function applyAv(desc)
+    local c=L.Character
+    if not c then return end
+    local h=c:FindFirstChildOfClass("Humanoid")
+    if h and desc then
+        pcall(function() h:ApplyDescription(desc) end)
+    end
+end
+local function mkAvBtn(txt,onClick)
+    local b=Instance.new("TextButton",cpS)
+    b.Size=UDim2.new(1,-4,0,30)
+    b.BackgroundColor3=BG2
+    b.Text=txt
+    b.TextColor3=TX
+    b.Font=Enum.Font.GothamBold
+    b.TextSize=10
+    b.AutoButtonColor=false
+    b.BorderSizePixel=0
+    b.ZIndex=12
+    Instance.new("UICorner",b).CornerRadius=UDim.new(0,6)
+    local st=Instance.new("UIStroke",b)
+    st.Color=RD
+    st.Thickness=1
+    st.Transparency=0.55
+    b.MouseButton1Click:Connect(onClick)
+    return b
+end
+local function refreshCP()
+    for _,c in pairs(cpS:GetChildren())do
+        if c:IsA("TextButton")then c:Destroy()end
+    end
+    for _,p in pairs(P:GetPlayers())do
+        if p~=L and p.Character then
+            mkAvBtn(p.Name,function()
+                local d=getAv(p)
+                if d then applyAv(d) end
+            end)
+        end
+    end
+    mkAvBtn("HerulAjaDeh",function()
+        local id=0
+        pcall(function() id=P:GetUserIdFromNameAsync("HerulAjaDeh") end)
+        if id>0 then
+            local s,d=pcall(function() return P:GetHumanoidDescriptionFromUserId(id) end)
+            if s and d then applyAv(d) end
         end
     end)
-    tpH.InputEnded:Connect(function(i)
-        if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then dg=false end
-    end)
-    U.InputChanged:Connect(function(i)
-        if dg and (i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch)then
-            local d=i.Position-ds
-            tpM.Position=UDim2.new(sp.X.Scale,sp.X.Offset+d.X,sp.Y.Scale,sp.Y.Offset+d.Y)
+    mkAvBtn("kojayy1",function()
+        local id=0
+        pcall(function() id=P:GetUserIdFromNameAsync("kojayy1") end)
+        if id>0 then
+            local s,d=pcall(function() return P:GetHumanoidDescriptionFromUserId(id) end)
+            if s and d then applyAv(d) end
         end
     end)
 end
+cpB.MouseButton1Click:Connect(function()
+    cpM.Visible=not cpM.Visible
+    if cpM.Visible then refreshCP()end
+end)
+cpX.MouseButton1Click:Connect(function()cpM.Visible=false end)
 L.CharacterAdded:Connect(function()
     task.wait(0.5)
     if spdOn then
@@ -588,11 +700,11 @@ local min=false
 mn.MouseButton1Click:Connect(function()
     min=not min
     if min then
-        mf.Size=UDim2.new(0,210,0,42)
+        mf.Size=UDim2.new(0,220,0,45)
         bd.Visible=false
         mn.Text="+"
     else
-        mf.Size=UDim2.new(0,210,0,300)
+        mf.Size=UDim2.new(0,220,0,330)
         bd.Visible=true
         mn.Text="-"
     end
@@ -619,6 +731,44 @@ do
         if dg and (i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch)then
             local d=i.Position-ds
             mf.Position=UDim2.new(sp.X.Scale,sp.X.Offset+d.X,sp.Y.Scale,sp.Y.Offset+d.Y)
+        end
+    end)
+end
+do
+    local dg,ds,sp
+    cpH.InputBegan:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then
+            dg=true
+            ds=i.Position
+            sp=cpM.Position
+        end
+    end)
+    cpH.InputEnded:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then dg=false end
+    end)
+    U.InputChanged:Connect(function(i)
+        if dg and (i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch)then
+            local d=i.Position-ds
+            cpM.Position=UDim2.new(sp.X.Scale,sp.X.Offset+d.X,sp.Y.Scale,sp.Y.Offset+d.Y)
+        end
+    end)
+end
+do
+    local dg,ds,sp
+    tpH.InputBegan:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then
+            dg=true
+            ds=i.Position
+            sp=tpM.Position
+        end
+    end)
+    tpH.InputEnded:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then dg=false end
+    end)
+    U.InputChanged:Connect(function(i)
+        if dg and (i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch)then
+            local d=i.Position-ds
+            tpM.Position=UDim2.new(sp.X.Scale,sp.X.Offset+d.X,sp.Y.Scale,sp.Y.Offset+d.Y)
         end
     end)
 end

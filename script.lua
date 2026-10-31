@@ -1,4 +1,4 @@
---[[ XAUZY HUB RENOVATED - BAGIAN 1/4 ]]
+--[[ XAUZY HUB V2 - BAGIAN 1/4 ]]
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -12,6 +12,7 @@ local CONFIG = {
         RD   = Color3.fromRGB(255, 27, 45),
         RDD  = Color3.fromRGB(140, 12, 25),
         TX   = Color3.fromRGB(240, 240, 240),
+        GRN  = Color3.fromRGB(50, 220, 80)
     },
     FlySpeed   = 55,
     WalkSpeed  = 60,
@@ -58,7 +59,7 @@ local function showNotif(txt)
     end)
 end
 
--- DRAG HELPER (Dipindah ke atas biar aman)
+-- DRAG HELPER
 local function makeDraggable(frame, handle)
     local dragging, dragStart, startPos
     handle = handle or frame
@@ -84,8 +85,8 @@ end
 
 -- MAIN FRAME
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.Size = UDim2.new(0, 230, 0, 360)
-MainFrame.Position = UDim2.new(0.5, -115, 0.5, -180)
+MainFrame.Size = UDim2.new(0, 240, 0, 380)
+MainFrame.Position = UDim2.new(0.5, -120, 0.5, -190)
 MainFrame.BackgroundColor3 = C.BG
 MainFrame.BorderSizePixel = 0
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 14)
@@ -113,7 +114,7 @@ local Title = Instance.new("TextLabel", Header)
 Title.Size = UDim2.new(1, -100, 1, 0)
 Title.Position = UDim2.new(0, 50, 0, 0)
 Title.BackgroundTransparency = 1
-Title.Text = "XAUZY HUB"
+Title.Text = "XAUZY HUB V2"
 Title.TextColor3 = C.TX
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 14
@@ -139,16 +140,21 @@ CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.BorderSizePixel = 0
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
 
-local Body = Instance.new("Frame", MainFrame)
+local Body = Instance.new("ScrollingFrame", MainFrame)
 Body.Size = UDim2.new(1, -20, 1, -62)
 Body.Position = UDim2.new(0, 10, 0, 52)
 Body.BackgroundTransparency = 1
+Body.BorderSizePixel = 0
+Body.ScrollBarThickness = 3
+Body.ScrollBarImageColor3 = C.RD
+Body.CanvasSize = UDim2.new(0, 0, 0, 0)
+Body.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Instance.new("UIListLayout", Body).Padding = UDim.new(0, 6)
 
 local ButtonStrokes = {}
 local function makeButton(text, order)
     local b = Instance.new("TextButton", Body)
-    b.Size = UDim2.new(1, 0, 0, 32)
+    b.Size = UDim2.new(1, -4, 0, 32)
     b.BackgroundColor3 = C.BG2
     b.Text = text
     b.TextColor3 = C.TX
@@ -171,13 +177,61 @@ local function setButton(b, on)
     else b.BackgroundColor3 = C.BG2; if s then s.Transparency = 0.55 end end
 end
 
+-- UI SLIDER (Untuk Speed & Fly)
+local function makeSlider(name, defaultVal, maxVal, order, callback)
+    local frame = Instance.new("Frame", Body)
+    frame.Size = UDim2.new(1, -4, 0, 45)
+    frame.BackgroundColor3 = C.BG2
+    frame.BorderSizePixel = 0
+    frame.LayoutOrder = order
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", frame).Color = C.RD
+
+    local lbl = Instance.new("TextLabel", frame)
+    lbl.Size = UDim2.new(1, -10, 0, 20)
+    lbl.Position = UDim2.new(0, 5, 0, 2)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = name .. " : " .. defaultVal
+    lbl.TextColor3 = C.TX
+    lbl.Font = Enum.Font.GothamBold
+    lbl.TextSize = 10
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+
+    local txtBox = Instance.new("TextBox", frame)
+    txtBox.Size = UDim2.new(1, -10, 0, 18)
+    txtBox.Position = UDim2.new(0, 5, 0, 22)
+    txtBox.BackgroundColor3 = C.BG
+    txtBox.Text = tostring(defaultVal)
+    txtBox.TextColor3 = C.GRN
+    txtBox.Font = Enum.Font.GothamBold
+    txtBox.TextSize = 10
+    txtBox.BorderSizePixel = 0
+    Instance.new("UICorner", txtBox).CornerRadius = UDim.new(0, 4)
+    
+    txtBox.FocusLost:Connect(function()
+        local num = tonumber(txtBox.Text)
+        if num and num > 0 and num <= maxVal then
+            lbl.Text = name .. " : " .. num
+            callback(num)
+        else
+            txtBox.Text = tostring(defaultVal)
+            callback(defaultVal)
+        end
+    end)
+    return frame
+end
+
 local ESPBtn = makeButton("ESP : OFF", 1)
 local FlyBtn = makeButton("FLY : OFF", 2)
 local SpeedBtn = makeButton("SPEED : OFF", 3)
 local AimHeadBtn = makeButton("AIM LOCK HEAD : OFF", 4)
 local AimBodyBtn = makeButton("AIM LOCK BODY : OFF", 5)
 local TPBtn = makeButton("TELEPORT", 6)
-local CopyBtn = makeButton("COPY AVA", 7)--[[ XAUZY HUB RENOVATED - BAGIAN 2/4 ]]
+local CopyBtn = makeButton("COPY AVA", 7)
+
+makeSlider("Fly Speed", CONFIG.FlySpeed, 500, 8, function(val) CONFIG.FlySpeed = val end)
+makeSlider("Walk Speed", CONFIG.WalkSpeed, 500, 9, function(val) CONFIG.WalkSpeed = val; if State.spdOn then applySpeed() end end)
+--[[ XAUZY HUB V2 - BAGIAN 2/4 ]]
 local ESPConnections = {}
 local function clearESP()
     for _, c in ipairs(ESPConnections) do pcall(function() c:Disconnect() end) end
@@ -251,79 +305,7 @@ ESPBtn.MouseButton1Click:Connect(function()
     if State.espOn then startESP() else clearESP() end
 end)
 
--- FLY
-local FlyConn, FlyTouchStart, FlyTouchMove, FlyTouchEnd
-local flyUpDown, flyStartY = 0, nil
-
-local function stopFly()
-    if FlyConn then FlyConn:Disconnect(); FlyConn = nil end
-    if FlyTouchStart then FlyTouchStart:Disconnect(); FlyTouchStart = nil end
-    if FlyTouchMove then FlyTouchMove:Disconnect(); FlyTouchMove = nil end
-    if FlyTouchEnd then FlyTouchEnd:Disconnect(); FlyTouchEnd = nil end
-    flyUpDown, flyStartY = 0, nil
-    local char = LocalPlayer.Character
-    if char then
-        local hrp = char:FindFirstChild("HumanoidRootPart")
-        local hm = char:FindFirstChildOfClass("Humanoid")
-        if hrp then
-            local bv = hrp:FindFirstChild("FlyBV"); if bv then bv:Destroy() end
-            local bg = hrp:FindFirstChild("FlyBG"); if bg then bg:Destroy() end
-        end
-        if hm then hm.PlatformStand = false end
-    end
-end
-
-local function startFly()
-    stopFly()
-    local char = LocalPlayer.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hm = char:FindFirstChildOfClass("Humanoid")
-    if not hrp or not hm then return end
-
-    local bv = Instance.new("BodyVelocity", hrp)
-    bv.Name = "FlyBV"; bv.MaxForce = Vector3.new(9e9, 9e9, 9e9); bv.Velocity = Vector3.zero
-    local bg = Instance.new("BodyGyro", hrp)
-    bg.Name = "FlyBG"; bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9); bg.P = 3000; bg.D = 100
-    hm.PlatformStand = true
-
-    FlyConn = RunService.RenderStepped:Connect(function()
-        if not State.flyOn or not hrp or not hrp.Parent then return end
-        local cam = workspace.CurrentCamera
-        if not cam then return end
-        local speed = State.spdOn and CONFIG.WalkSpeed or CONFIG.FlySpeed
-        local mv = hm.MoveDirection
-        local dir, moving = Vector3.zero, false
-        if mv.Magnitude > 0.05 then
-            moving = true
-            local lk = Vector3.new(cam.CFrame.LookVector.X, 0, cam.CFrame.LookVector.Z)
-            local rt = Vector3.new(cam.CFrame.RightVector.X, 0, cam.CFrame.RightVector.Z)
-            if lk.Magnitude > 0.001 then lk = lk.Unit end
-            if rt.Magnitude > 0.001 then rt = rt.Unit end
-            dir = lk * -mv.Z + rt * mv.X
-            if dir.Magnitude > 0.001 then dir = dir.Unit end
-        end
-        bv.Velocity = dir * speed + Vector3.new(0, flyUpDown * speed, 0)
-        if moving then bg.CFrame = CFrame.new(hrp.Position, hrp.Position + dir) end
-    end)
-
-    FlyTouchStart = UserInputService.TouchStarted:Connect(function(i) if State.flyOn then flyStartY = i.Position.Y end end)
-    FlyTouchMove = UserInputService.TouchMoved:Connect(function(i)
-        if not State.flyOn or not flyStartY then return end
-        local d = i.Position.Y - flyStartY
-        flyUpDown = (d < -40 and 1) or (d > 40 and -1) or 0
-    end)
-    FlyTouchEnd = UserInputService.TouchEnded:Connect(function() flyStartY = nil; flyUpDown = 0 end)
-end
-
-FlyBtn.MouseButton1Click:Connect(function()
-    State.flyOn = not State.flyOn
-    FlyBtn.Text = State.flyOn and "FLY : ON" or "FLY : OFF"
-    setButton(FlyBtn, State.flyOn)
-    if State.flyOn then startFly() else stopFly() end
-end)
-
--- SPEED
+-- SPEED CONTROL
 local function applySpeed()
     local char = LocalPlayer.Character
     if not char then return end
@@ -337,7 +319,72 @@ SpeedBtn.MouseButton1Click:Connect(function()
     setButton(SpeedBtn, State.spdOn)
     applySpeed()
 end)
---[[ XAUZY HUB RENOVATED - BAGIAN 3/4 ]]
+
+-- FLY (Sistem UI / Mobile Friendly)
+local flyVelocity, flyGyro, flyConn
+local flyDir = Vector3.zero
+
+local function stopFly()
+    if flyConn then flyConn:Disconnect(); flyConn = nil end
+    if flyVelocity then flyVelocity:Destroy(); flyVelocity = nil end
+    if flyGyro then flyGyro:Destroy(); flyGyro = nil end
+    local char = LocalPlayer.Character
+    if char then
+        local hm = char:FindFirstChildOfClass("Humanoid")
+        if hm then hm.PlatformStand = false end
+    end
+end
+
+local function startFly()
+    stopFly()
+    local char = LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    local hm = char:FindFirstChildOfClass("Humanoid")
+    if not hrp or not hm then return end
+
+    hm.PlatformStand = true
+    flyVelocity = Instance.new("BodyVelocity", hrp)
+    flyVelocity.Name = "FlyBV"
+    flyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    flyVelocity.Velocity = Vector3.zero
+
+    flyGyro = Instance.new("BodyGyro", hrp)
+    flyGyro.Name = "FlyBG"
+    flyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    flyGyro.P = 3000; flyGyro.D = 100
+
+    flyConn = RunService.RenderStepped:Connect(function()
+        if not State.flyOn or not hrp or not hrp.Parent then return end
+        local cam = workspace.CurrentCamera
+        if not cam then return end
+        
+        local speed = CONFIG.FlySpeed
+        local mv = hm.MoveDirection
+        local dir = Vector3.zero
+        
+        if mv.Magnitude > 0.05 then
+            local lk = Vector3.new(cam.CFrame.LookVector.X, 0, cam.CFrame.LookVector.Z)
+            local rt = Vector3.new(cam.CFrame.RightVector.X, 0, cam.CFrame.RightVector.Z)
+            if lk.Magnitude > 0.001 then lk = lk.Unit end
+            if rt.Magnitude > 0.001 then rt = rt.Unit end
+            dir = (lk * -mv.Z + rt * mv.X).Unit
+        end
+        
+        flyDir = flyDir:Lerp(dir, 0.2) -- Smoothening
+        flyVelocity.Velocity = flyDir * speed
+        if flyDir.Magnitude > 0.01 then flyGyro.CFrame = CFrame.new(hrp.Position, hrp.Position + flyDir) end
+    end)
+end
+
+FlyBtn.MouseButton1Click:Connect(function()
+    State.flyOn = not State.flyOn
+    FlyBtn.Text = State.flyOn and "FLY : ON" or "FLY : OFF"
+    setButton(FlyBtn, State.flyOn)
+    if State.flyOn then startFly() else stopFly() end
+end)
+--[[ XAUZY HUB V2 - BAGIAN 3/4 ]]
+-- AIM LOCK
 local AimConn, AimBeamData
 local function clearAimVisual()
     if AimBeamData and AimBeamData.att and AimBeamData.att.Parent then pcall(function() AimBeamData.att:Destroy() end) end
@@ -465,7 +512,7 @@ local function makeListButton(parent, text, onClick)
     return b
 end
 
--- PANEL TELEPORT
+-- TELEPORT
 local TPFrame, TPScroll = createPanel("TeleportPanel", "TELEPORT", 190, 270)
 local function refreshTP()
     for _, c in ipairs(TPScroll:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
@@ -475,10 +522,7 @@ local function refreshTP()
                 local myChar = LocalPlayer.Character
                 if myChar and p.Character then
                     local th = p.Character:FindFirstChild("HumanoidRootPart")
-                    if th then
-                        -- PERBAIKAN: PivotTo aman dari error
-                        if pcall(function() myChar:PivotTo(th.CFrame * CFrame.new(0, 0, 2)) end) then showNotif("TP ke "..p.Name) end
-                    end
+                    if th then if pcall(function() myChar:PivotTo(th.CFrame * CFrame.new(0, 0, 2)) end) then showNotif("TP ke "..p.Name) end end
                 end
             end)
         end
@@ -486,38 +530,58 @@ local function refreshTP()
 end
 TPBtn.MouseButton1Click:Connect(function() TPFrame.Visible = not TPFrame.Visible; if TPFrame.Visible then refreshTP() end end)
 
--- PANEL COPY AVA
+-- COPY AVA (FIXED)
 local CPFrame, CPScroll = createPanel("CopyAvaPanel", "COPY AVA", 210, 290)
+
 local function applyAvatar(userId, name)
     local char = LocalPlayer.Character
-    if not char then return showNotif("Char gak ada") end
+    if not char then return showNotif("Karakter tidak ditemukan") end
     local hm = char:FindFirstChildOfClass("Humanoid")
-    if not hm then return showNotif("Humanoid gak ada") end
-    showNotif("Loading AVA "..name.."...")
+    if not hm then return showNotif("Humanoid tidak ditemukan") end
+    
+    showNotif("Memuat AVA "..name.."...")
     task.spawn(function()
-        local suc, desc = pcall(function() return Players:GetHumanoidDescriptionFromUserId(userId) end)
-        if not suc or not desc then return showNotif("Gagal ambil AVA") end
-        if not pcall(function() hm:ApplyDescription(desc) end) then
-            if not pcall(function() hm:ApplyDescriptionReset(desc) end) then return showNotif("AVA diblokir game") end
+        -- Ambil data avatar
+        local suc, desc = pcall(function()
+            return Players:GetHumanoidDescriptionFromUserId(userId)
+        end)
+        if not suc or not desc then return showNotif("Gagal mengambil data avatar") end
+
+        -- Trick: Matikan state agar bisa copy
+        local oldState = hm:GetState()
+        pcall(function() hm:ChangeState(Enum.HumanoidStateType.Physics) end)
+        
+        -- Coba ApplyDescription
+        local ok = pcall(function() hm:ApplyDescription(desc) end)
+        
+        -- Jika gagal, coba Reset
+        if not ok then
+            ok = pcall(function() hm:ApplyDescriptionReset(desc) end)
         end
-        showNotif("AVA "..name.." sukses!")
+        
+        -- Kembalikan state
+        pcall(function() hm:ChangeState(oldState) end)
+
+        if ok then showNotif("AVA "..name.." berhasil!") 
+        else showNotif("Game memblokir Copy AVA") end
     end)
 end
 
 local function refreshCP()
     for _, c in ipairs(CPScroll:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
     for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer and p.Character then makeListButton(CPScroll, p.Name, function() applyAvatar(p.UserId, p.Name) end) end
+        if p ~= LocalPlayer and p.Character then 
+            makeListButton(CPScroll, p.Name, function() applyAvatar(p.UserId, p.Name) end) 
+        end
     end
     for _, pName in ipairs({"HerulAjaDeh", "kojayy1"}) do
         makeListButton(CPScroll, pName, function()
             local id = 0; pcall(function() id = Players:GetUserIdFromNameAsync(pName) end)
-            if id > 0 then applyAvatar(id, pName) else showNotif("User gak ketemu") end
+            if id > 0 then applyAvatar(id, pName) else showNotif("User tidak ditemukan") end
         end)
     end
 end
-CopyBtn.MouseButton1Click:Connect(function() CPFrame.Visible = not CPFrame.Visible; if CPFrame.Visible then refreshCP() end end)
---[[ XAUZY HUB RENOVATED - BAGIAN 4/4 ]]
+CopyBtn.MouseButton1Click:Connect(function() CPFrame.Visible = not CPFrame.Visible; if CPFrame.Visible then refreshCP() end end)--[[ XAUZY HUB V2 - BAGIAN 4/4 ]]
 LocalPlayer.CharacterAdded:Connect(function(char)
     task.wait(0.5)
     if State.spdOn then
@@ -535,7 +599,7 @@ end)
 local isMinimized = false
 MinBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
-    MainFrame.Size = isMinimized and UDim2.new(0, 230, 0, 48) or UDim2.new(0, 230, 0, 360)
+    MainFrame.Size = isMinimized and UDim2.new(0, 240, 0, 48) or UDim2.new(0, 240, 0, 380)
     Body.Visible = not isMinimized
     MinBtn.Text = isMinimized and "+" or "-"
 end)
@@ -549,4 +613,4 @@ CloseBtn.MouseButton1Click:Connect(function()
 end)
 
 makeDraggable(MainFrame, Header)
-showNotif("Xauzy Hub Loaded!")
+showNotif("Xauzy Hub V2 Dimuat!")
